@@ -22,7 +22,14 @@ func indexHandler() http.HandlerFunc {
 	}
 }
 
+func pathHandler() http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {	
+		renderTemplate(w, "inputCsvFile.gohtml", nil)
+	}
+}
+
 func main() {
+	http.HandleFunc("/addPath",pathHandler())
 	http.HandleFunc("/",indexHandler())
 	//Start listening
 	http.ListenAndServe(":8080",nil)
