@@ -1,0 +1,34 @@
+{{ define "content" }}
+	<div align="center">
+		<h2>List of entries</h2>
+		<br>
+			<table border="1px solid black;">
+			<tr>
+				<th> Sr. No. </th>
+				<th> Name </th>
+				<th> Phone Number </th>
+				<th> Email </th>
+				<th> Address </th>
+				<th> Operation </th>
+			<tr>
+			
+			<!--Loop this on the number of records in the .csv file-->
+			<tr>
+				<th> 1 </th>
+				<th> Tejas </th>
+				<th> 7049074660 </th>
+				<th> tkonduri@uncc.edu </th>
+				<th> XYZ </th>
+				<th>
+				<form action="/delete/" method="post">
+					<input type="submit" value="Delete">
+				</form>
+				<form action="/edit/" method="post">
+					<input type="submit" value="Edit">
+				</form>
+				</th>
+			</tr>
+			</table>		
+	</div>
+{{.contacts}}	
+{{end}}	

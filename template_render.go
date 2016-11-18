@@ -3,7 +3,7 @@ package main
 import (
 	"html/template"
 	"net/http"
-	//"fmt"
+	"fmt"
 )
 
 //Render gohtml
@@ -22,11 +22,24 @@ func indexHandler() http.HandlerFunc {
 	}
 }
 
+func listHandler() http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {	
+		test := map[string][]string{
+			"contacts" : {"1;Abhishek Chandratre;+17049068013;abhishek.chandratre@gmail.com;516 barton creek drive, APT E;0", "2;Tejas Konduri;+17049068013;tejas.konduri@gmail.com;516 barton creek drive, APT E;0"},
+		}
+		
+		renderTemplate(w, "list.gohtml", &test)
+	}
+}
+
 func addContactHandler() http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {	
 		if r.Method == "GET"{
 
 			renderTemplate(w, "addContact.gohtml", nil)
+		}
+		else if r.Method == "POST"{
+		
 		}
 	}
 }
@@ -38,8 +51,10 @@ func pathHandler() http.HandlerFunc {
 }
 
 func main() {
+	fmt.Println("Starting Application...");
 	http.HandleFunc("/addPath",pathHandler())
 	http.HandleFunc("/addContact",addContactHandler())
+	http.HandleFunc("/list", listHandler())
 	http.HandleFunc("/",indexHandler())
 	//Start listening
 	http.ListenAndServe(":8080",nil)
