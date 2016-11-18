@@ -16,7 +16,7 @@ func renderTemplate(w http.ResponseWriter, tmpl_str string, node *map[string][]s
 func indexHandler() http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {
 		test := map[string][]string{
-			"test" : {"hello1", "hello2"},
+			"contacts" : {"1;Abhishek Chandratre;+17049068013;abhishek.chandratre@gmail.com;516 barton creek drive, APT E;0", "2;Tejas Konduri;+17049068013;tejas.konduri@gmail.com;516 barton creek drive, APT E;0"},
 		}
 		renderTemplate(w, "index.gohtml", &test)
 	}
