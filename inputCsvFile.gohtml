@@ -1,15 +1,11 @@
-<!DOCTYPE html>
+{{ define "content" }}
+<div align="center">
+	<h2>Please enter the directory (.csv) path</h2>
 
-<html lang="en">
-	<body>
-		<div align="center">
-			<h2>Please enter the directory (.csv) path</h2>
-			
-			<form action="/path/" method="post">
-				<input type="string" name="csvPath">
-				<input type="Submit" value="Submit">
-			</form>
-			
-		</div>
-	</body>
-</html>	
+	<form action="/path/" method="post">
+		<input type="string" name="csvPath">
+		<input type="Submit" value="Submit">
+	</form>
+
+</div>
+{{end}}

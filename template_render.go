@@ -22,6 +22,15 @@ func indexHandler() http.HandlerFunc {
 	}
 }
 
+func addContactHandler() http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {	
+		if r.Method == "GET"{
+
+			renderTemplate(w, "addContact.gohtml", nil)
+		}
+	}
+}
+
 func pathHandler() http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {	
 		renderTemplate(w, "inputCsvFile.gohtml", nil)
@@ -30,6 +39,7 @@ func pathHandler() http.HandlerFunc {
 
 func main() {
 	http.HandleFunc("/addPath",pathHandler())
+	http.HandleFunc("/addContact",addContactHandler())
 	http.HandleFunc("/",indexHandler())
 	//Start listening
 	http.ListenAndServe(":8080",nil)
