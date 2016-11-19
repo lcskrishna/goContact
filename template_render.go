@@ -56,6 +56,9 @@ func addContactHandler() http.HandlerFunc {
 			fmt.Println(phoneNo)			
 			fmt.Println(email)
 			fmt.Println(address)
+
+			var record string = name + ";" + phoneNo + ";" + email + ";" + address  
+			fmt.Println(record)
 			
 			renderTemplate(w, "list.gohtml", nil)		
 		}
