@@ -6,6 +6,8 @@ import (
 	"fmt"
 )
 
+var csvPath string = ""
+
 //Render gohtml
 func renderTemplate(w http.ResponseWriter, tmpl_str string, node *map[string][]string) {
 	tmpl := make(map[string]*template.Template)
@@ -38,15 +40,31 @@ func addContactHandler() http.HandlerFunc {
 
 			renderTemplate(w, "addContact.gohtml", nil)
 		}
-		else if r.Method == "POST"{
-		
-		}
 	}
 }
 
 func pathHandler() http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {	
-		renderTemplate(w, "inputCsvFile.gohtml", nil)
+		
+		fmt.Println("Inside pathHandler method...");
+		
+		if r.Method == "GET"{
+			fmt.Println("Inside GET method...");
+			renderTemplate(w, "inputCsvFile.gohtml", nil)		
+		}
+		
+		if r.Method == "POST"{
+			fmt.Println("Inside POST method...");
+			r.ParseForm()
+			//Get input value of csv path
+			csvPath := r.Form["csvPath"][0]
+			
+			fmt.Println(csvPath)			
+			
+			renderTemplate(w, "list.gohtml", nil)		
+		}
+		
+		
 	}
 }
 
