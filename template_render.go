@@ -36,9 +36,28 @@ func listHandler() http.HandlerFunc {
 
 func addContactHandler() http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {	
+		
+		fmt.Println("Inside addContactHandler method...");
+		
 		if r.Method == "GET"{
-
+			fmt.Println("Inside GET method...");
 			renderTemplate(w, "addContact.gohtml", nil)
+		}
+		if r.Method == "POST"{
+			fmt.Println("Inside POST method...");
+			r.ParseForm()
+			//Get input value of csv path
+			name := r.Form["name"][0]
+			phoneNo := r.Form["phoneNo"][0]
+			email := r.Form["email"][0]
+			address := r.Form["address"][0]
+			
+			fmt.Println(name)
+			fmt.Println(phoneNo)			
+			fmt.Println(email)
+			fmt.Println(address)
+			
+			renderTemplate(w, "list.gohtml", nil)		
 		}
 	}
 }
@@ -63,8 +82,6 @@ func pathHandler() http.HandlerFunc {
 			
 			renderTemplate(w, "list.gohtml", nil)		
 		}
-		
-		
 	}
 }
 
