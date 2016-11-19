@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-var csvPath string = ""
+var fileName string = ""
 
 //Render gohtml
 func renderTemplate(w http.ResponseWriter, tmpl_str string, node *map[string][]string) {
@@ -18,72 +18,76 @@ func renderTemplate(w http.ResponseWriter, tmpl_str string, node *map[string][]s
 func indexHandler() http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request) {
 		test := map[string][]string{
-			"contacts" : {"1;Abhishek Chandratre;+17049068013;abhishek.chandratre@gmail.com;516 barton creek drive, APT E;0", "2;Tejas Konduri;+17049068013;tejas.konduri@gmail.com;516 barton creek drive, APT E;0"},
+			"contacts" : {"1;Abhishek Chandratre;+17049068013;abhishek.chandratre@gmail.com;516 barton creek drive, APT E;4", "2;Tejas Konduri;+17049068013;tejas.konduri@gmail.com;516 barton creek drive, APT E;3"},
 		}
 		renderTemplate(w, "index.gohtml", &test)
 	}
 }
 
-func listHandler() http.HandlerFunc {
-	return func (w http.ResponseWriter, r *http.Request) {	
+func listContactHandler() http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {
 		test := map[string][]string{
 			"contacts" : {"1;Abhishek Chandratre;+17049068013;abhishek.chandratre@gmail.com;516 barton creek drive, APT E;0", "2;Tejas Konduri;+17049068013;tejas.konduri@gmail.com;516 barton creek drive, APT E;0"},
 		}
-		
 		renderTemplate(w, "list.gohtml", &test)
 	}
 }
 
 func addContactHandler() http.HandlerFunc {
-	return func (w http.ResponseWriter, r *http.Request) {	
-		
-		fmt.Println("Inside addContactHandler method...");
-		
+	return func (w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET"{
-			fmt.Println("Inside GET method...");
 			renderTemplate(w, "addContact.gohtml", nil)
 		}
 		if r.Method == "POST"{
-			fmt.Println("Inside POST method...");
 			r.ParseForm()
 			//Get input value of csv path
 			name := r.Form["name"][0]
 			phoneNo := r.Form["phoneNo"][0]
 			email := r.Form["email"][0]
 			address := r.Form["address"][0]
-			
-			fmt.Println(name)
-			fmt.Println(phoneNo)			
-			fmt.Println(email)
-			fmt.Println(address)
 
-			var record string = name + ";" + phoneNo + ";" + email + ";" + address  
-			fmt.Println(record)
-			
-			renderTemplate(w, "list.gohtml", nil)		
+			var record string = name + ";" + phoneNo + ";" + email + ";" + address + ";0"
+			fmt.Println("Adding record" + record)
+			http.Redirect(w,r,"/listContact",http.StatusSeeOther)
 		}
 	}
 }
 
 func pathHandler() http.HandlerFunc {
-	return func (w http.ResponseWriter, r *http.Request) {	
-		
-		fmt.Println("Inside pathHandler method...");
-		
+	return func (w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET"{
-			fmt.Println("Inside GET method...");
-			renderTemplate(w, "inputCsvFile.gohtml", nil)		
+			renderTemplate(w, "inputCsvFile.gohtml", nil)
 		}
-		
 		if r.Method == "POST"{
-			fmt.Println("Inside POST method...");
 			r.ParseForm()
 			//Get input value of csv path
-			csvPath := r.Form["csvPath"][0]
-			
-			fmt.Println(csvPath)			
-			
-			renderTemplate(w, "list.gohtml", nil)		
+			fileName := r.Form["csvPath"][0]
+			fmt.Println("Adding file "+ fileName + " For contact listing")
+			http.Redirect(w,r,"/listContact",http.StatusSeeOther)
+		}
+	}
+}
+
+func editContactHandler() http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST"{
+			r.ParseForm()
+			//Get input value of csv path
+			id := r.Form["numId"][0]
+			fmt.Println("Editing ID[" + id +"].")
+			http.Redirect(w,r,"/listContact",http.StatusSeeOther)
+		}
+	}
+}
+
+func deleteContactHandler() http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST"{
+			r.ParseForm()
+			//Get input value of csv path
+			id := r.Form["numId"][0]
+			fmt.Println("Deleting ID[" + id +"].")
+			http.Redirect(w,r,"/listContact",http.StatusSeeOther)
 		}
 	}
 }
@@ -92,10 +96,10 @@ func main() {
 	fmt.Println("Starting Application...");
 	http.HandleFunc("/addPath",pathHandler())
 	http.HandleFunc("/addContact",addContactHandler())
-	http.HandleFunc("/list", listHandler())
+	http.HandleFunc("/listContact", listContactHandler())
+	http.HandleFunc("/deleteContact", deleteContactHandler())
+	http.HandleFunc("/editContact", editContactHandler())
 	http.HandleFunc("/",indexHandler())
 	//Start listening
 	http.ListenAndServe(":8080",nil)
 }
-
-
